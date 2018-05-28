@@ -28,6 +28,7 @@ class Login {
     };
     const onError = err => done(err);
 
+    /* eslint-disable-next-line promise/prefer-await-to-then */
     auth(user, password, this.config).then(onSuccess, onError);
   }
 }
