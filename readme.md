@@ -1,6 +1,6 @@
 # verdaccio-github-token
 
-[![Build Status](https://travis-ci.org/reklatsmasters/verdaccio-github-token.svg?branch=master)](https://travis-ci.org/reklatsmasters/verdaccio-github-token)
+[![Build Status](https://travis-ci.com/reklatsmasters/verdaccio-github-token.svg?branch=master)](https://travis-ci.com/reklatsmasters/verdaccio-github-token)
 [![npm](https://img.shields.io/npm/v/verdaccio-github-token.svg)](https://npmjs.org/package/verdaccio-github-token)
 [![node](https://img.shields.io/node/v/verdaccio-github-token.svg)](https://npmjs.org/package/verdaccio-github-token)
 [![license](https://img.shields.io/npm/l/verdaccio-github-token.svg)](https://npmjs.org/package/verdaccio-github-token)
