@@ -1,6 +1,6 @@
 {
   "name": "verdaccio-github-token",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Verdaccio authentication plugin over github personal access tokens",
   "main": "index.js",
   "scripts": {
