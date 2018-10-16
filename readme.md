@@ -16,7 +16,7 @@ npm i -g verdaccio verdaccio-github-token
 
 ## Usage
 
-Use your [personal access token](https://github.com/settings/tokens) as password and github username as login.
+Use your [personal access token](https://github.com/settings/tokens) as password and github username as login. **Note**: You should make your membership in the organization public, see [github api](https://developer.github.com/v3/orgs/#list-user-organizations).
 
 ## Config
 
