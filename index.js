@@ -1,7 +1,8 @@
 const got = require('got');
 const LRU = require('lru-cache');
 
-const API_URL = `https://api.github.com/user`;
+const API_URL = `https://api.github.com/`;
+const USER_API = `user`;
 
 class Login {
   constructor(config, stuff) {
@@ -41,21 +42,23 @@ async function auth(user, password, config) {
     retries: config.httpRetries || 2
   };
 
-  const res = await got.get(API_URL, options);
-  const {login, organizations_url} = res.body; // eslint-disable-line camelcase
+  let auth_api = `${API_URL}${USER_API}`;
+  const res = await got.get(auth_api, options);
+  const {login} = res.body; // eslint-disable-line camelcase
 
   if (login.toLowerCase() !== user) {
     throw new Error('Invalid user');
   }
 
+  let organisation = config.org;
+  let organizations_url = `${API_URL}orgs/${organisation}/members/${user}`;
   const res2 = await got.get(organizations_url, options);
-  const orgs = res2.body.map(org => org.login);
 
-  if (!orgs.some(org => org === config.org)) {
-    throw new Error(`User ${user} is not a member of ${config.org}`);
+  if (res2.statusCode != 204) {
+    throw new Error(`User ${user} is not a member of ${config.org}. Error ${res2.body}`);
   }
 
-  return orgs;
+  return [config.org];
 }
 
 module.exports = (...args) => new Login(...args);
