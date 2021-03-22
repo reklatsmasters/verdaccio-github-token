@@ -42,7 +42,7 @@ async function auth(user, password, config) {
     retries: config.httpRetries || 2
   };
 
-  let auth_api = `${API_URL}${USER_API}`;
+  const auth_api = `${API_URL}${USER_API}`; // eslint-disable-line camelcase
   const res = await got.get(auth_api, options);
   const {login} = res.body; // eslint-disable-line camelcase
 
@@ -50,11 +50,10 @@ async function auth(user, password, config) {
     throw new Error('Invalid user');
   }
 
-  let organisation = config.org;
-  let organizations_url = `${API_URL}orgs/${organisation}/members/${user}`;
+  const organizations_url = `${API_URL}orgs/${config.org}/members/${user}`; // eslint-disable-line camelcase
   const res2 = await got.get(organizations_url, options);
 
-  if (res2.statusCode != 204) {
+  if (res2.statusCode !== 204) {
     throw new Error(`User ${user} is not a member of ${config.org}. Error ${res2.body}`);
   }
 
