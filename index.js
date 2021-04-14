@@ -35,6 +35,13 @@ class Login {
 }
 
 async function auth(user, password, config) {
+  /**
+   * [auth] Authenticate user using two API's, one to check username match with what is supplied and the other to verify organisation membership.
+   * @param  {string} user     [github username]
+   * @param  {string} password [github personal access token]
+   * @param  {object} config   [config object]
+   * @return {[list/array]}    [config.org] Array of organisation list which user has access to when the username and password are authenticated from github.
+  */
   const options = {
     auth: `${user}:${password}`,
     json: true,
@@ -50,6 +57,7 @@ async function auth(user, password, config) {
     throw new Error('Invalid user');
   }
 
+  // url will be https://api.github.com/orgs/unhaggle/members/utek
   const organizations_url = `${API_URL}orgs/${config.org}/members/${user}`; // eslint-disable-line camelcase
   const res2 = await got.get(organizations_url, options);
 
