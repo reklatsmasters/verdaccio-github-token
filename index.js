@@ -57,7 +57,7 @@ async function auth(user, password, config) {
     throw new Error('Invalid user');
   }
 
-  // url will be https://api.github.com/orgs/unhaggle/members/utek
+  // Url will be https://api.github.com/orgs/unhaggle/members/utek
   const organizations_url = `${API_URL}orgs/${config.org}/members/${user}`; // eslint-disable-line camelcase
   const res2 = await got.get(organizations_url, options);
 
