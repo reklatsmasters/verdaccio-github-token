@@ -42,3 +42,7 @@ See [got#timeout](https://www.npmjs.com/package/got#timeout).
 * `httpRetries: number, default=2`
 
 See [got#retries](https://www.npmjs.com/package/got#retries).
+
+## License
+
+MIT, 2018 (c) Dmitriy Tsvettsikh
