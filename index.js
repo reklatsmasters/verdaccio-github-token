@@ -1,7 +1,8 @@
 const got = require('got');
 const LRU = require('lru-cache');
 
-const API_URL = `https://api.github.com/user`;
+const API_URL = `https://api.github.com/`;
+const USER_API = `user`;
 
 class Login {
   constructor(config, stuff) {
@@ -34,6 +35,13 @@ class Login {
 }
 
 async function auth(user, password, config) {
+  /**
+   * [auth] Authenticate user using two API's, one to check username match with what is supplied and the other to verify organisation membership.
+   * @param  {string} user     [github username]
+   * @param  {string} password [github personal access token]
+   * @param  {object} config   [config object]
+   * @return {[list/array]}    [config.org] Array of organisation list which user has access to when the username and password are authenticated from github.
+  */
   const options = {
     auth: `${user}:${password}`,
     json: true,
@@ -41,21 +49,23 @@ async function auth(user, password, config) {
     retries: config.httpRetries || 2
   };
 
-  const res = await got.get(API_URL, options);
-  const {login, organizations_url} = res.body; // eslint-disable-line camelcase
+  const auth_api = `${API_URL}${USER_API}`; // eslint-disable-line camelcase
+  const res = await got.get(auth_api, options);
+  const {login} = res.body; // eslint-disable-line camelcase
 
   if (login.toLowerCase() !== user) {
     throw new Error('Invalid user');
   }
 
+  // Url will be https://api.github.com/orgs/unhaggle/members/utek
+  const organizations_url = `${API_URL}orgs/${config.org}/members/${user}`; // eslint-disable-line camelcase
   const res2 = await got.get(organizations_url, options);
-  const orgs = res2.body.map(org => org.login);
 
-  if (!orgs.some(org => org === config.org)) {
-    throw new Error(`User ${user} is not a member of ${config.org}`);
+  if (res2.statusCode !== 204) {
+    throw new Error(`User ${user} is not a member of ${config.org}. Error ${res2.body}`);
   }
 
-  return orgs;
+  return [config.org];
 }
 
 module.exports = (...args) => new Login(...args);

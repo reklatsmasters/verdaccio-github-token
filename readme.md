@@ -1,34 +1,31 @@
 # verdaccio-github-token
 
-[![Build Status](https://travis-ci.com/reklatsmasters/verdaccio-github-token.svg?branch=master)](https://travis-ci.com/reklatsmasters/verdaccio-github-token)
-[![npm](https://img.shields.io/npm/v/verdaccio-github-token.svg)](https://npmjs.org/package/verdaccio-github-token)
-[![node](https://img.shields.io/node/v/verdaccio-github-token.svg)](https://npmjs.org/package/verdaccio-github-token)
-[![license](https://img.shields.io/npm/l/verdaccio-github-token.svg)](https://npmjs.org/package/verdaccio-github-token)
-[![downloads](https://img.shields.io/npm/dm/verdaccio-github-token.svg)](https://npmjs.org/package/verdaccio-github-token)
-
-Verdaccio authentication plugin via Github [personal access tokens](https://github.com/settings/tokens).
+- This is an extension of [verdaccio-github-token](https://github.com/reklatsmasters/verdaccio-github-token/)
+  which needs organisation membership to be public.
+- The extended package does not need your organisation membership to be public and works with private membership for `unhaggle`.
+- Uses Github [personal access tokens](https://github.com/settings/tokens) as password for authentication.
 
 ## Install
 
 ```sh
-npm i -g verdaccio verdaccio-github-token
+npm install verdaccio verdaccio-github-token@2.0.0 --registry https://npm.motoinsight.com
 ```
 
 ## Usage
 
-Use your [personal access token](https://github.com/settings/tokens) as password and github username as login. **Note**: You should make your membership in the organization public, see [github api](https://developer.github.com/v3/orgs/#list-user-organizations).
+Use your [personal access token](https://github.com/settings/tokens) as password and github username as login.
 
 ## Config
 
 ```yml
 auth:
   github-token:
-    org: my-loved-company
+    org: unhaggle
 ```
 
 * `org: string, required`
 
-Peoples within this org will be able to auth.
+People within this org will be able to auth (public/private membership, both work)
 
 * `ttl: number, default=60e3`
 
