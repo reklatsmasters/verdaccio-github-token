@@ -41,7 +41,7 @@ async function auth(user, password, config) {
    * @param  {string} password [github personal access token]
    * @param  {object} config   [config object]
    * @return {[list/array]}    [config.org] Array of organisation list which user has access to when the username and password are authenticated from github.
-  */
+   */
   const options = {
     auth: `${user}:${password}`,
     json: true,
@@ -49,23 +49,23 @@ async function auth(user, password, config) {
     retries: config.httpRetries || 2
   };
 
-  const auth_api = `${API_URL}${USER_API}`; // eslint-disable-line camelcase
-  const res = await got.get(auth_api, options);
-  const {login} = res.body; // eslint-disable-line camelcase
+  const authApi = `${API_URL}${USER_API}`;
+  const res = await got.get(authApi, options);
+  const {login} = res.body;
 
   if (login.toLowerCase() !== user) {
     throw new Error('Invalid user');
   }
 
-  // Url will be https://api.github.com/orgs/unhaggle/members/utek
-  const organizations_url = `${API_URL}orgs/${config.org}/members/${user}`; // eslint-disable-line camelcase
-  const res2 = await got.get(organizations_url, options);
+  for (const i_org of config.org.split(",")) {
+    const organizationsUrl = `${API_URL}orgs/${i_org}/members/${user}`;
+    const res2 = await got.get(organizationsUrl, options);
 
-  if (res2.statusCode !== 204) {
-    throw new Error(`User ${user} is not a member of ${config.org}. Error ${res2.body}`);
+    if (res2.statusCode == 204) {
+      return [i_org];
+    }
   }
-
-  return [config.org];
+  throw new Error(`User ${user} is not a member of ${config.org}. Error ${res2.body}`);
 }
 
 module.exports = (...args) => new Login(...args);
