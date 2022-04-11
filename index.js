@@ -57,15 +57,17 @@ async function auth(user, password, config) {
     throw new Error('Invalid user');
   }
 
-  for (const i_org of config.org.split(",")) {
-    const organizationsUrl = `${API_URL}orgs/${i_org}/members/${user}`;
+  for (const org of config.org.split(',')) {
+    const organizationsUrl = `${API_URL}orgs/${org}/members/${user}`;
+
+    /* eslint-disable no-await-in-loop */
     const res2 = await got.get(organizationsUrl, options);
 
-    if (res2.statusCode == 204) {
-      return [i_org];
+    if (res2.statusCode === 204) {
+      return [org];
     }
   }
-  throw new Error(`User ${user} is not a member of ${config.org}. Error ${res2.body}`);
+  throw new Error(`User ${user} is not a member of any of ${config.org}.`);
 }
 
 module.exports = (...args) => new Login(...args);
