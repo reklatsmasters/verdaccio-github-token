@@ -43,6 +43,16 @@ See [got#timeout](https://www.npmjs.com/package/got#timeout).
 
 See [got#retries](https://www.npmjs.com/package/got#retries).
 
+
+## Publish package
+
+```
+npm install
+npm build
+npm login --registry=https://npm.motoinsight.com
+npm publish --registry=https://npm.motoinsight.com .
+```
+
 ## License
 
 MIT, 2018 (c) Dmitriy Tsvettsikh
