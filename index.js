@@ -50,21 +50,28 @@ async function auth(user, password, config) {
   };
 
   const authApi = `${API_URL}${USER_API}`;
-  const res = await got.get(authApi, options);
-  const {login} = res.body;
+  const authResult = await got.get(authApi, options);
+  const {login} = authResult.body;
 
   if (login.toLowerCase() !== user) {
-    throw new Error('Invalid user');
+    throw new Error('Invalid user. Use lowercase only.');
   }
 
   for (const org of config.org.split(',')) {
     const organizationsUrl = `${API_URL}orgs/${org}/members/${user}`;
 
     /* eslint-disable no-await-in-loop */
-    const res2 = await got.get(organizationsUrl, options);
-
-    if (res2.statusCode === 204) {
-      return [org];
+    try {
+      const organizationResult = await got.get(organizationsUrl, options);
+      if (organizationResult.statusCode === 204) {
+        return [org];
+      }
+    } catch (err) {
+      // Catch 404 errors when the user does not belong to org.
+      if (err instanceof got.HTTPError) {
+        continue;
+      }
+      throw err;
     }
   }
   throw new Error(`User ${user} is not a member of any of ${config.org}.`);
