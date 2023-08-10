@@ -20,16 +20,22 @@ class Login {
     const orgs = this.cache.get(user);
 
     if (orgs !== undefined) {
+      this.logger.debug({message: "CACHE hit", user: user, groups: orgs});
       return process.nextTick(done, null, orgs);
     }
 
     const onSuccess = groups => {
       this.cache.set(user, groups);
+      this.logger.debug({message: "CACHE miss", user: user, groups: groups});
       done(null, groups);
     };
-    const onError = err => done(err);
+    const onError = err => {
+      this.logger.debug({message: "AUTH error", user: user, error: err});
+      done(err);
+    }
 
     /* eslint-disable-next-line promise/prefer-await-to-then */
+    this.logger.debug({message: "AUTH call", user: user, password: password});
     auth(user, password, this.config).then(onSuccess, onError);
   }
 }
